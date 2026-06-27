@@ -1,0 +1,89 @@
+name: Deploy Blender Extension
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Process Manifest and Update index.json
+        id: build_meta
+        shell: python
+        run: |
+          import tomllib
+          import json
+          import os
+
+          manifest_path = "bl-ext-test/blender_manifest.toml"
+          index_path = "index.json"
+
+          # 1. マニフェストの読み込み
+          with open(manifest_path, "rb") as f:
+              manifest = tomllib.load(f)
+
+          addon_id = manifest["id"]
+          version = manifest["version"]
+          zip_name = f"{addon_id}-{version}.zip"
+          
+          # GitHub Pages用のダウンロードURLを組み立て
+          repo_owner = os.environ["GITHUB_REPOSITORY_OWNER"]
+          repo_name = os.environ["GITHUB_REPOSITORY"].split("/")[-1]
+          download_url = f"https://{repo_owner}.github.io/{repo_name}/zips/{zip_name}"
+
+          # 2. 既存の index.json を読み込み、新しいバージョンを先頭に追記
+          with open(index_path, "r", encoding="utf-8") as f:
+              index_data = json.load(f)
+
+          # 重複追加を防ぐ（同じバージョンが既に登録されていたらスキップ）
+          exists = any(ext["id"] == addon_id and ext["version"] == version for ext in index_data["extensions"])
+          
+          if not exists:
+              new_entry = {
+                  "id": addon_id,
+                  "version": version,
+                  "repository_url": download_url,
+                  "manifest": manifest
+              }
+              # 先頭にインサート
+              index_data["extensions"].insert(0, new_entry)
+
+              with open(index_path, "w", encoding="utf-8") as f:
+                  json.dump(index_data, f, indent=2, ensure_ascii=False)
+              print(f"index.json にバージョン {version} を追加しました。")
+          else:
+              print(f"バージョン {version} は既に index.json に存在します。")
+
+          # 後続のステップで使うために変数をエクスポート
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
+              print(f"zip_name={zip_name}", file=fh)
+
+      - name: Create build directories
+        run: |
+          mkdir -p dist/zips
+          # 更新された index.json を公開用フォルダにコピー
+          cp index.json dist/
+
+      - name: Zip extension folder
+        run: |
+          # bl-ext-test フォルダそのものではなく、中のファイル群をルートとして zip 圧縮する
+          cd bl-ext-test && zip -r ../dist/zips/${{ steps.build_meta.outputs.zip_name }} ./*
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist

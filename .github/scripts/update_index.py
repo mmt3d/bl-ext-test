@@ -96,7 +96,7 @@ def main():
     manifest["archive_size"] = os.path.getsize(dist_zip_path)
     manifest["archive_hash"] = f"sha256:{calculate_sha256(dist_zip_path)}"
 
-    index_data["data"].insert(0, manifest)
+    index_data["data"].append(manifest)
 
     with open(dist_index_path, "w", encoding="utf-8") as f:
         json.dump(index_data, f, indent=2, ensure_ascii=False)

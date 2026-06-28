@@ -2,7 +2,7 @@
 bl_info = {
     'name': "Blender Extension Test",
     'author': 'mmt3d',
-    'version': (2026, 6, 30),
+    'version': (2026, 6, 31),
     'blender': (3, 3, 0),
     'location': "location test",
     'description': "description test",

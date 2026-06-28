@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'bl-ext-test/blender_manifest.toml'
+      - 'bl-ext-test/__init__.py'
 
 permissions:
   contents: write

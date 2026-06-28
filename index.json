@@ -5,6 +5,10 @@
     {
       "schema_version": "1.0.0",
       "id": "bl_ext_test",
+      "name": "Blender Extension Test",
+      "version": "2026.6.30",
+      "tagline": "description test",
+      "maintainer": "mmt3d",
       "type": "add-on",
       "tags": [
         "Import-Export"
@@ -21,13 +25,9 @@
       "permissions": {
         "files": "Imports images, nodes, and translations from the bundled files"
       },
-      "version": "2026.6.29",
-      "name": "Blender Extension Test",
-      "tagline": "description test",
-      "maintainer": "mmt3d",
-      "archive_url": "https://mmt3d.github.io/bl-ext-test/zips/bl_ext_test-2026.6.29.zip",
-      "archive_size": 1055,
-      "archive_hash": "sha256:e2586e84fec40731f0781239784583838ad9cc003bab059ced62111002baa572"
+      "archive_url": "https://mmt3d.github.io/bl-ext-test/zips/bl_ext_test-2026.6.30.zip",
+      "archive_size": 1053,
+      "archive_hash": "sha256:852c6b8692a4b8b4af1c0cb1358b4f76c3df3401c813b63442ebd0faabf1056d"
     }
   ]
 }

@@ -36,8 +36,8 @@ def main():
     if not exists:
         new_entry = {}
         for key, value in manifest.items():
-            if key != "permissions": 
-                new_entry[key] = value
+            #if key != "permissions":
+            new_entry[key] = value
 
         new_entry["archive_url"] = download_url
 

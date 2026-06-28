@@ -48,8 +48,8 @@ def main():
     addon_id = manifest["id"]
 
     bl_info = extract_bl_info(init_script_path)
-    version_tuple = bl_info.get("version", (1, 0, 0))
-    version = ".".join(map(str, version_tuple))
+    version = ".".join(map(str, bl_info.get("version")))
+    bl_version = ".".join(map(str, bl_info.get("blender")))
 
     repo_owner = os.environ["GITHUB_REPOSITORY_OWNER"]
     repo_name = os.environ["GITHUB_REPOSITORY"].split("/")[-1]
@@ -67,6 +67,7 @@ def main():
     manifest["name"] = bl_info["name"]
     manifest["tagline"] = bl_info["description"]
     manifest["maintainer"] = repo_owner
+    manifest["blender_version_min"] = bl_version
 
     toml_lines = []
     for key, value in manifest.items():

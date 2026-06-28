@@ -6,7 +6,7 @@
       "schema_version": "1.0.0",
       "id": "bl_ext_test",
       "name": "Blender Extension Test",
-      "version": "2026.6.27",
+      "version": "mm.2026.6.27",
       "tagline": "Blender Extension Test",
       "maintainer": "mmt3d",
       "type": "add-on",
@@ -22,9 +22,12 @@
       "copyright": [
         "2026 mmt3d"
       ],
-      "archive_url": "https://mmt3d.github.io/bl-ext-test/zips/bl_ext_test-2026.6.27.zip",
-      "archive_size": 1052,
-      "archive_hash": "sha256:629a9a5b595d923e561cc2dfb6ce9c53ff0393e31ef7b8e90316d6236275505c"
+      "permissions": {
+        "files": "Imports images, nodes, and translations from the bundled files"
+      },
+      "archive_url": "https://mmt3d.github.io/bl-ext-test/zips/bl_ext_test-mm.2026.6.27.zip",
+      "archive_size": 1053,
+      "archive_hash": "sha256:a2feb4bfce8cbf482e1c202014a76f43e7fa9cb1ae271776323bf2499cbdad70"
     }
   ]
 }

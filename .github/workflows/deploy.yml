@@ -16,31 +16,52 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
+        with:
+          path: src
+
+      - name: Checkout Distribution Repository
+        uses: actions/checkout@v6
+        with:
+          repository: 'mmt3d/blender-extensions'
+          token: ${{ secrets.DEPLOY_TOKEN }}
+          path: dist
 
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
           python-version: '3.13'
 
-      - name: Process Manifest and Update Central index.json
+      - name: Process Manifest and Update Distribution index.json
         id: build_meta
         run: |
           python .github/scripts/update_index.py
 
-      - name: Create build directories
-        run: |
-          mkdir -p dist/zips
-          # 更新された index.json を公開用フォルダにコピー
-          cp index.json dist/
-          cp *.zip dist/zips/
-
-#      - name: Zip extension folder
+#      - name: Create build directories
 #        run: |
-#          # bl-ext-test フォルダそのものではなく、中のファイル群をルートとして zip 圧縮する
-#          cd bl-ext-test && zip -r ../dist/zips/${{ steps.build_meta.outputs.zip_name }} ./*
+#          mkdir -p dist/zips
+#          # 更新された index.json を公開用フォルダにコピー
+#          cp index.json dist/
+#          cp *.zip dist/zips/
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
+      - name: Zip extension folder
+        run: |
+          cd src/bl-ext-test && zip -r ../../dist/zips/${{ steps.build_meta.outputs.zip_name }} ./*
+
+#      - name: Deploy to GitHub Pages
+#        uses: peaceiris/actions-gh-pages@v4
+#        with:
+#          github_token: ${{ secrets.GITHUB_TOKEN }}
+#          publish_dir: ./dist
+
+      - name: Commit and Push to Central Repository
+        run: |
+          cd dist
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add index.json zips/
+          if ! git diff --cached --exit-code; then
+            git commit -m "chore: Deploy addon from external repository"
+            git push origin main
+          else
+            echo "変更はありませんでした。"
+          fi

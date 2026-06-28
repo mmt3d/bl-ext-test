@@ -7,20 +7,14 @@ import zipfile
 
 
 def extract_bl_info(init_path):
-    """__init__.py から bl_info を安全・確実に抽出する"""
+    """__init__.py から bl_info を抽出する"""
     with open(init_path, "r", encoding="utf-8") as f:
         source_code = f.read()
-
-    # 構文木にパース
     tree = ast.parse(source_code)
-
-    # トップレベルの代入文（Assignment）を走査
     for node in tree.body:
         if isinstance(node, ast.Assign):
             for target in node.targets:
-                # 変数名が 'bl_info' かチェック
                 if isinstance(target, ast.Name) and target.id == "bl_info":
-                    # ast.literal_eval で安全にPythonの辞書オブジェクトに変換
                     try:
                         return ast.literal_eval(node.value)
                     except (ValueError, SyntaxError) as e:
@@ -38,10 +32,16 @@ def calculate_sha256(filepath: str) -> str:
 
 
 def main():
-    addon_dir = "bl-ext-test"
+    src_dir = "src"
+    dist_dir = "dist"
+    dist_repo_name = "blender-extensions"
+    dist_repo_owner = "mmt3d"
+    addon_dir = os.path.join(src_dir, "bl-ext-test")
     init_script_path = os.path.join(addon_dir, "__init__.py")
-    index_path = "index.json"
     base_toml_path = "blender_manifest_base.toml"
+    dist_index_path = os.path.join(dist_dir, "index.json")
+    dist_zips_dir = os.path.join(dist_dir, "zips")
+    os.makedirs(dist_zips_dir, exist_ok=True)
 
     with open(base_toml_path, "rb") as f:
         manifest = tomllib.load(f)
@@ -51,10 +51,7 @@ def main():
     version = ".".join(map(str, bl_info.get("version")))
     bl_version = ".".join(map(str, bl_info.get("blender")))
 
-    repo_owner = os.environ["GITHUB_REPOSITORY_OWNER"]
-    repo_name = os.environ["GITHUB_REPOSITORY"].split("/")[-1]
-
-    with open(index_path, "r", encoding="utf-8") as f:
+    with open(dist_index_path, "r", encoding="utf-8") as f:
         index_data = json.load(f)
 
     exists = any(ext["id"] == addon_id and ext["version"] == version for ext in index_data["data"])
@@ -66,7 +63,7 @@ def main():
     manifest["version"] = version
     manifest["name"] = bl_info["name"]
     manifest["tagline"] = bl_info["description"]
-    manifest["maintainer"] = repo_owner
+    manifest["maintainer"] = os.environ["GITHUB_REPOSITORY_OWNER"]
     manifest["blender_version_min"] = bl_version
 
     toml_lines = []
@@ -84,26 +81,29 @@ def main():
         f.write("\n".join(toml_lines) + "\n")
 
     zip_name = f"{addon_id}-{version}.zip"
-    with zipfile.ZipFile(zip_name, 'w', zipfile.ZIP_DEFLATED) as zf:
+    dist_zip_path = os.path.join(dist_zips_dir, zip_name)
+    with zipfile.ZipFile(dist_zip_path, 'w', zipfile.ZIP_DEFLATED) as zf:
         for root, dirs, files in os.walk(addon_dir):
             for file in files:
                 file_path = os.path.join(root, file)
                 # zip内での相対パス（剥き出し状態）にする
                 arcname = os.path.relpath(file_path, addon_dir)
                 zf.write(file_path, arcname)
+    if os.path.exists(toml_path):
+        os.remove(toml_path)
 
-    manifest["archive_url"] = f"https://{repo_owner}.github.io/{repo_name}/zips/{zip_name}"
-    manifest["archive_size"] = os.path.getsize(zip_name)
-    manifest["archive_hash"] = f"sha256:{calculate_sha256(zip_name)}"
+    manifest["archive_url"] = f"https://{dist_repo_owner}.github.io/{dist_repo_name}/zips/{zip_name}"
+    manifest["archive_size"] = os.path.getsize(dist_zip_path)
+    manifest["archive_hash"] = f"sha256:{calculate_sha256(dist_zip_path)}"
 
     index_data["data"].insert(0, manifest)
 
-    with open(index_path, "w", encoding="utf-8") as f:
+    with open(dist_index_path, "w", encoding="utf-8") as f:
         json.dump(index_data, f, indent=2, ensure_ascii=False)
     print(f"配信用 index.json にバージョン {version} を追加しました。")
 
     with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
-        print(f"zip_path={zip_name}", file=fh)
+        print(f"zip_path={dist_zip_path}", file=fh)
 
 
 if __name__ == "__main__":

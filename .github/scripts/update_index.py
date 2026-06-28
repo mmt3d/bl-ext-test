@@ -42,7 +42,7 @@ def main():
         new_entry["archive_url"] = download_url
 
         import zipfile
-        addon_dir = "addon-src/bl-ext-test"
+        addon_dir = "bl-ext-test"
         with zipfile.ZipFile(zip_name, 'w', zipfile.ZIP_DEFLATED) as zf:
             for root, dirs, files in os.walk(addon_dir):
                 for file in files:

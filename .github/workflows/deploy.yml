@@ -30,6 +30,7 @@ jobs:
           mkdir -p dist/zips
           # 更新された index.json を公開用フォルダにコピー
           cp index.json dist/
+          cp *.zip dist/zips/
 
 #      - name: Zip extension folder
 #        run: |

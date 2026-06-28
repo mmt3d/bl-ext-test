@@ -1,34 +1,28 @@
 {
-  "schema_version": "1.0.0",
-  "extensions": [
+  "version": "v1",
+  "blocklist": [],
+  "data": [
     {
+      "schema_version": "1.0.0",
       "id": "bl_ext_test",
+      "name": "Blender Extension Test",
       "version": "2026.6.27",
-      "repository_url": "https://mmt3d.github.io/bl-ext-test/zips/bl_ext_test-2026.6.27.zip",
-      "manifest": {
-        "schema_version": "1.0.0",
-        "id": "bl_ext_test",
-        "name": "Blender Extension Test",
-        "version": "2026.6.27",
-        "tagline": "Blender Extension Test",
-        "maintainer": "mmt3d",
-        "type": "add-on",
-        "tags": [
-          "Import-Export"
-        ],
-        "blender_version_min": "4.3.0",
-        "blender_version_max": "5.1.*",
-        "license": [
-          "Apache-2.0"
-        ],
-        "website": "https://github.com/mmt3d/bl-ext-test",
-        "copyright": [
-          "2026 mmt3d"
-        ],
-        "permissions": {
-          "files": "Imports images, nodes, and translations from the bundled files"
-        }
-      }
+      "tagline": "Blender Extension Test",
+      "maintainer": "mmt3d",
+      "type": "add-on",
+      "tags": [
+        "Import-Export"
+      ],
+      "blender_version_min": "4.3.0",
+      "blender_version_max": "5.1.*",
+      "license": [
+        "Apache-2.0"
+      ],
+      "website": "https://github.com/mmt3d/bl-ext-test",
+      "copyright": [
+        "2026 mmt3d"
+      ],
+      "archive_url": "https://mmt3d.github.io/bl-ext-test/zips/bl_ext_test-2026.6.27.zip"
     }
   ]
 }

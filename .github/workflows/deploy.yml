@@ -20,56 +20,10 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Process Manifest and Update index.json
+      - name: Process Manifest and Update Central index.json
         id: build_meta
-        shell: python
         run: |
-          import tomllib
-          import json
-          import os
-
-          manifest_path = "bl-ext-test/blender_manifest.toml"
-          index_path = "index.json"
-
-          # 1. マニフェストの読み込み
-          with open(manifest_path, "rb") as f:
-              manifest = tomllib.load(f)
-
-          addon_id = manifest["id"]
-          version = manifest["version"]
-          zip_name = f"{addon_id}-{version}.zip"
-          
-          # GitHub Pages用のダウンロードURLを組み立て
-          repo_owner = os.environ["GITHUB_REPOSITORY_OWNER"]
-          repo_name = os.environ["GITHUB_REPOSITORY"].split("/")[-1]
-          download_url = f"https://{repo_owner}.github.io/{repo_name}/zips/{zip_name}"
-
-          # 2. 既存の index.json を読み込み、新しいバージョンを先頭に追記
-          with open(index_path, "r", encoding="utf-8") as f:
-              index_data = json.load(f)
-
-          # 重複追加を防ぐ（同じバージョンが既に登録されていたらスキップ）
-          exists = any(ext["id"] == addon_id and ext["version"] == version for ext in index_data["extensions"])
-          
-          if not exists:
-              new_entry = {
-                  "id": addon_id,
-                  "version": version,
-                  "repository_url": download_url,
-                  "manifest": manifest
-              }
-              # 先頭にインサート
-              index_data["extensions"].insert(0, new_entry)
-
-              with open(index_path, "w", encoding="utf-8") as f:
-                  json.dump(index_data, f, indent=2, ensure_ascii=False)
-              print(f"index.json にバージョン {version} を追加しました。")
-          else:
-              print(f"バージョン {version} は既に index.json に存在します。")
-
-          # 後続のステップで使うために変数をエクスポート
-          with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
-              print(f"zip_name={zip_name}", file=fh)
+          python addon-src/.github/scripts/update_index.py
 
       - name: Create build directories
         run: |

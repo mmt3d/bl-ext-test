@@ -31,34 +31,17 @@ jobs:
         with:
           python-version: '3.13'
 
-      - name: Process Manifest and Update Distribution index.json
+      - name: Process Manifest and Build ZIP
         id: build_meta
         run: |
           python src/.github/scripts/update_index.py
-
-#      - name: Create build directories
-#        run: |
-#          mkdir -p dist/zips
-#          # 更新された index.json を公開用フォルダにコピー
-#          cp index.json dist/
-#          cp *.zip dist/zips/
-
-      - name: Zip extension folder
-        run: |
-          cd src/bl-ext-test && zip -r ../../dist/zips/${{ steps.build_meta.outputs.zip_name }} ./*
-
-#      - name: Deploy to GitHub Pages
-#        uses: peaceiris/actions-gh-pages@v4
-#        with:
-#          github_token: ${{ secrets.GITHUB_TOKEN }}
-#          publish_dir: ./dist
 
       - name: Commit and Push to Central Repository
         run: |
           cd dist
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add index.json zips/
+          git add zips/
           if ! git diff --cached --exit-code; then
             git commit -m "chore: Deploy addon from external repository"
             git push origin main

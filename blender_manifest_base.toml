@@ -1,12 +1,12 @@
 schema_version = "1.0.0"
 id = "bl_ext_test"
-#name = "Blender Extension Test"
-#version = "2026.6.28"
-#tagline = "Blender Extension Test"
-#maintainer = "mmt3d"
+name = "** from bl_info **"
+version = "** from bl_info **"
+tagline = "** from bl_info **"
+maintainer = "** from bl_info **"
 type = "add-on"
 tags = ["Import-Export"]
-blender_version_min = "4.3.0"
+blender_version_min = "** from bl_info **"
 blender_version_max = "5.1.99"
 license = ["Apache-2.0"]
 website = "https://github.com/mmt3d/bl-ext-test"

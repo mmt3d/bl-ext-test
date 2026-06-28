@@ -17,7 +17,7 @@
           "Import-Export"
         ],
         "blender_version_min": "4.3.0",
-        "blender_version_max": "5.1",
+        "blender_version_max": "5.1.*",
         "license": [
           "Apache-2.0"
         ],

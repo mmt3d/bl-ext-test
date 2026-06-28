@@ -1,0 +1,16 @@
+schema_version = "1.0.0"
+id = "bl_ext_test"
+#name = "Blender Extension Test"
+#version = "2026.6.28"
+#tagline = "Blender Extension Test"
+#maintainer = "mmt3d"
+type = "add-on"
+tags = ["Import-Export"]
+blender_version_min = "4.3.0"
+blender_version_max = "5.1.99"
+license = ["Apache-2.0"]
+website = "https://github.com/mmt3d/bl-ext-test"
+copyright = ["2026 mmt3d"]
+
+[permissions]
+files = "Imports images, nodes, and translations from the bundled files"

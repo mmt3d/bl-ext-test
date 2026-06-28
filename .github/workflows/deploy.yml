@@ -31,10 +31,10 @@ jobs:
           # 更新された index.json を公開用フォルダにコピー
           cp index.json dist/
 
-      - name: Zip extension folder
-        run: |
-          # bl-ext-test フォルダそのものではなく、中のファイル群をルートとして zip 圧縮する
-          cd bl-ext-test && zip -r ../dist/zips/${{ steps.build_meta.outputs.zip_name }} ./*
+#      - name: Zip extension folder
+#        run: |
+#          # bl-ext-test フォルダそのものではなく、中のファイル群をルートとして zip 圧縮する
+#          cd bl-ext-test && zip -r ../dist/zips/${{ steps.build_meta.outputs.zip_name }} ./*
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4

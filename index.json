@@ -3,13 +3,13 @@
   "extensions": [
     {
       "id": "bl_ext_test",
-      "version": "mm.2026.6.27",
-      "repository_url": "https://mmt3d.github.io/bl-ext-test/zips/bl_ext_test-mm.2026.6.27.zip",
+      "version": "2026.6.27",
+      "repository_url": "https://mmt3d.github.io/bl-ext-test/zips/bl_ext_test-2026.6.27.zip",
       "manifest": {
         "schema_version": "1.0.0",
         "id": "bl_ext_test",
         "name": "Blender Extension Test",
-        "version": "mm.2026.6.27",
+        "version": "2026.6.27",
         "tagline": "Blender Extension Test",
         "maintainer": "mmt3d",
         "type": "add-on",

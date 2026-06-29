@@ -1,11 +1,8 @@
 name: Deploy Blender Extension
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'bl-ext-test/__init__.py'
+  release:
+    types: [published]
 
 permissions:
   contents: write
@@ -36,6 +33,13 @@ jobs:
         run: |
           python src/.github/scripts/update_index.py
 
+      - name: Upload ZIP to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/zips/${{ steps.build_meta.outputs.zip_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Commit and Push to Central Repository
         run: |
           cd dist
@@ -46,5 +50,5 @@ jobs:
             git commit -m "chore: Deploy addon from external repository"
             git push origin main
           else
-            echo "変更はありませんでした。"
+            echo "既に配信リポジトリに存在します。"
           fi

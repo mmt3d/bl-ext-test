@@ -64,18 +64,7 @@ def main():
     with open(toml_path, "w", encoding="utf-8") as f:
         f.write("\n".join(toml_lines) + "\n")
 
-    with zipfile.ZipFile(dist_zip_path, 'w', zipfile.ZIP_DEFLATED) as zf:
-        for root, dirs, files in os.walk(addon_dir):
-            for file in files:
-                file_path = os.path.join(root, file)
-                arcname = os.path.relpath(file_path, addon_dir)
-                zf.write(file_path, arcname)
-    if os.path.exists(toml_path):
-        os.remove(toml_path)
-
-    # deploy.ymlに変数（zip_name）を引き渡す設定
-    with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
-        print(f"zip_name={zip_name}", fh)
+    print(f"マニフェスト生成完了: {toml_path}")
 
 
 if __name__ == "__main__":

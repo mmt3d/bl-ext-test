@@ -28,9 +28,14 @@ jobs:
         with:
           python-version: '3.13'
 
-      - name: Process Manifest and Build ZIP
+      - name: Create Manifest
         id: build_meta
         run: python src/.github/scripts/update_index.py
+
+      - name: Zip extension folder
+        run: |
+          cd src/bl-ext-test
+          zip -r ../../dist/zips/${{ steps.build_meta.outputs.zip_name }} ./*
 
       - name: Upload ZIP to GitHub Release
         uses: softprops/action-gh-release@v3

@@ -27,13 +27,12 @@ jobs:
         run: python .github/scripts/get_version.py
 
       - name: Create GitHub Release Draft
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: v${{ steps.get_version.outputs.version }}
           name: v${{ steps.get_version.outputs.version }}
           draft: true
           body: |
-            *
             *
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -39,10 +39,8 @@ def main():
     bl_version = ".".join(map(str, bl_info.get("blender")))
 
     zip_name = f"{addon_id}-{version}.zip"
-    dist_zip_path = os.path.join(dist_zips_dir, zip_name)
-    if os.path.exists(dist_zip_path):
-        print(f"バージョン {version} のZIPは既に存在するため、ビルドをスキップします。")
-        return
+    with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
+        print(f"zip_name={zip_name}", fh)
 
     # merge
     manifest["version"] = version

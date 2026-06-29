@@ -30,8 +30,7 @@ jobs:
 
       - name: Process Manifest and Build ZIP
         id: build_meta
-        run: |
-          python src/.github/scripts/update_index.py
+        run: python src/.github/scripts/update_index.py
 
       - name: Upload ZIP to GitHub Release
         uses: softprops/action-gh-release@v2

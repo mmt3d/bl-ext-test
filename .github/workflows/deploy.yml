@@ -33,7 +33,7 @@ jobs:
         run: python src/.github/scripts/update_index.py
 
       - name: Upload ZIP to GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           files: dist/zips/${{ steps.build_meta.outputs.zip_name }}
         env:

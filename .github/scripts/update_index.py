@@ -40,7 +40,7 @@ def main():
 
     zip_name = f"{addon_id}-{version}.zip"
     with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
-        print(f"zip_name={zip_name}", fh)
+        print(f"zip_name={zip_name}", file=fh)
 
     # merge
     manifest["version"] = version

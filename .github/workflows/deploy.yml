@@ -11,6 +11,8 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    outputs:
+      zip_name: ${{ steps.build_meta.outputs.zip_name }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6

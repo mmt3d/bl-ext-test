@@ -33,31 +33,27 @@ jobs:
         id: build_meta
         run: python src/.github/scripts/update_index.py
 
-      - name: Echo output
-        run: |
-          echo ${{ steps.build_meta.outputs.zip_name }}
-
       - name: Zip extension folder
         run: |
           cd src/bl-ext-test
           zip -r ../../dist/zips/${{ steps.build_meta.outputs.zip_name }} ./*
 
-#      - name: Upload ZIP to GitHub Release
-#        uses: softprops/action-gh-release@v3
-#        with:
-#          files: dist/zips/${{ steps.build_meta.outputs.zip_name }}
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#
-#      - name: Commit and Push to Central Repository
-#        run: |
-#          cd dist
-#          git config --local user.email "action@github.com"
-#          git config --local user.name "GitHub Action"
-#          git add zips/
-#          if ! git diff --cached --exit-code; then
-#            git commit -m "chore: Deploy addon from external repository"
-#            git push origin main
-#          else
-#            echo "既に配信リポジトリに存在します。"
-#          fi
+      - name: Upload ZIP to GitHub Release
+        uses: softprops/action-gh-release@v3
+        with:
+          files: dist/zips/${{ steps.build_meta.outputs.zip_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit and Push to Central Repository
+        run: |
+          cd dist
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add zips/
+          if ! git diff --cached --exit-code; then
+            git commit -m "chore: Deploy addon from external repository"
+            git push origin main
+          else
+            echo "既に配信リポジトリに存在します。"
+          fi

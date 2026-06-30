@@ -1,4 +1,4 @@
-name: Deploy Blender Extension
+name: Test Output
 
 on:
   workflow_dispatch: {}

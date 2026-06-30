@@ -24,7 +24,7 @@ jobs:
 
       - name: Test Script
         id: build_meta
-        run: python src/.github/scripts/test_output.py
+        run: python src/.github/scripts/update_index.py
 
       - name: Echo output
         run: |

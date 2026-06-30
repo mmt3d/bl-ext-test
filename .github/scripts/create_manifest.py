@@ -2,7 +2,6 @@ import ast
 import json
 import os
 import tomllib
-import zipfile
 
 
 def extract_bl_info(init_path):
@@ -23,12 +22,9 @@ def extract_bl_info(init_path):
 
 def main():
     src_dir = "src"
-    dist_dir = "dist"
     addon_dir = os.path.join(src_dir, "bl-ext-test")
     init_script_path = os.path.join(addon_dir, "__init__.py")
     base_toml_path = os.path.join(src_dir, "blender_manifest_base.toml")
-    dist_zips_dir = os.path.join(dist_dir, "zips")
-    os.makedirs(dist_zips_dir, exist_ok=True)
 
     with open(base_toml_path, "rb") as f:
         manifest = tomllib.load(f)

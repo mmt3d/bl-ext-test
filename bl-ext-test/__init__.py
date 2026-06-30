@@ -2,7 +2,7 @@
 bl_info = {
     'name': "Blender Extension Test",
     'author': 'mmt3d',
-    'version': (2026, 7, 1),
+    'version': (2026, 7, 2),
     'blender': (3, 3, 0),
     'location': "location test",
     'description': "description test",
@@ -16,11 +16,11 @@ import bpy
 
 class SIMPLEADDON_OT_hello(bpy.types.Operator):
     bl_idname = "simple_addon.say_hello"
-    bl_label = "Say Hello10"
+    bl_label = "Say Hello11"
     bl_description = "Prints a message to the console"
     def execute(self, context):
-        self.report({'INFO'}, "Hello10 from Blender Addon!")
-        print("Hello10 from Blender Addon!")
+        self.report({'INFO'}, "Hello11 from Blender Addon!")
+        print("Hello11 from Blender Addon!")
         return {'FINISHED'}
 
 

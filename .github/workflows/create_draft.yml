@@ -39,7 +39,6 @@ jobs:
           zip -r ../${{ steps.build_meta.outputs.zip_name }} ./*
 
       - name: Create Metadata
-        id: create_meta
         env:
           ZIP_NAME: ${{ steps.build_meta.outputs.zip_name }}
           TAG_NAME: ${{ github.event.release.tag_name }}
@@ -71,4 +70,4 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: metadata.json
-          key: metadata-${{ github.event.repository.name }}-v${{ steps.create_meta.outputs.version }}-${{ steps.create_release.outputs.id }}
+          key: metadata-${{ github.event.repository.name }}-v${{ steps.build_meta.outputs.version }}-${{ steps.create_release.outputs.id }}

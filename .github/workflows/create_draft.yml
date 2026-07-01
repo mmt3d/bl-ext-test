@@ -23,17 +23,48 @@ jobs:
         with:
           python-version: '3.13'
 
-      - name: Extract Version from bl_info
-        id: get_version
-        run: python .github/scripts/get_version.py
+#      - name: Extract Version from bl_info
+#        id: get_version
+#        run: python .github/scripts/get_version.py
 
-      - name: Create GitHub Release Draft
-        uses: softprops/action-gh-release@v3
-        with:
-          tag_name: v${{ steps.get_version.outputs.version }}
-          name: v${{ steps.get_version.outputs.version }}
-          draft: true
-          body: |
-            *
+      - name: Create Manifest
+        id: build_meta
+        run: python src/.github/scripts/create_manifest.py
+
+      - name: Zip extension folder
+        run: |
+          cd src/bl-ext-test
+          zip -r ../${{ steps.build_meta.outputs.zip_name }} ./*
+
+      - name: Create Metadata
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ZIP_NAME: ${{ steps.build_meta.outputs.zip_name }}
+          TAG_NAME: ${{ github.event.release.tag_name }}
+        run: python src/.github/scripts/create_metadata.py
+
+#      - name: Create GitHub Release Draft
+#        uses: softprops/action-gh-release@v3
+#        with:
+#          tag_name: v${{ steps.get_version.outputs.version }}
+#          name: v${{ steps.get_version.outputs.version }}
+#          draft: true
+#          body: |
+#            *
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create GitHub Release Draft with Artifacts
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: src/${{ steps.build_meta.outputs.zip_name }}
+          tag: v${{ steps.build_meta.outputs.version }}
+          name: v${{ steps.build_meta.outputs.version }}
+          draft: true
+          generateReleaseNotes: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Stock Metadata to Cache
+        uses: actions/cache/save@v4
+        with:
+          path: metadata.json
+          key: metadata-${{ github.event.repository.name }}-v${{ steps.build_meta.outputs.version }}-${{ steps.create_release.outputs.id }}

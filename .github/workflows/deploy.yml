@@ -72,10 +72,10 @@ jobs:
           fail-on-cache-miss: true
 
       - name: Load metadata content
-        id: load_json
+        id: encode_json
         run: |
-          JSON_CONTENT=$(jq -c . metadata.json)
-          echo "meta_payload=${JSON_CONTENT}" >> $GITHUB_ENV
+          B64_CONTENT=$(base64 -w 0 metadata.json)
+          echo "meta_payload=${B64_CONTENT}" >> $GITHUB_ENV
 
       - name: Send Signal to Distribution Repository
         run: |
@@ -84,4 +84,4 @@ jobs:
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${{ secrets.DEPLOY_TOKEN }}" \
             https://api.github.com/repos/mmt3d/blender-extensions/dispatches \
-            -d '{"event_type": "addon_published", "client_payload": {"metadata": ${{ env.meta_payload }}}}'
+            -d '{"event_type": "addon_published", "client_payload": {"metadata": "${{ env.meta_payload }}"}}'

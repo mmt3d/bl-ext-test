@@ -12,58 +12,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-#      - name: Checkout repository
-#        uses: actions/checkout@v6
-#        with:
-#          path: src
-#
-#      - name: Checkout Distribution Repository
-#        uses: actions/checkout@v6
-#        with:
-#          repository: 'mmt3d/blender-extensions'
-#          token: ${{ secrets.DEPLOY_TOKEN }}
-#          path: dist
-#
-#      - name: Set up Python
-#        uses: actions/setup-python@v6
-#        with:
-#          python-version: '3.13'
-#
-#      - name: Create Manifest
-#        id: build_meta
-#        run: python src/.github/scripts/create_manifest.py
-#
-#      - name: Zip extension folder
-#        run: |
-#          cd src/bl-ext-test
-#          zip -r ../${{ steps.build_meta.outputs.zip_name }} ./*
-#
-#      - name: Create Metadata
-#        env:
-#          ZIP_NAME: ${{ steps.build_meta.outputs.zip_name }}
-#          TAG_NAME: ${{ github.event.release.tag_name }}
-#        run: python src/.github/scripts/create_metadata.py
-#
-#      - name: Upload ZIP to GitHub Release
-#        uses: softprops/action-gh-release@v3
-#        with:
-#          files: src/${{ steps.build_meta.outputs.zip_name }}
-#          tag_name: ${{ github.event.release.tag_name }}
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#
-#      - name: Commit and Push to Central Repository
-#        run: |
-#          cd dist
-#          git config --local user.email "action@github.com"
-#          git config --local user.name "GitHub Action"
-#          git add metadata/
-#          if ! git diff --cached --exit-code; then
-#            git commit -m "chore: Add version metadata for ${{ steps.build_meta.outputs.zip_name }}"
-#            git push origin main
-#          else
-#            echo "既に配信リポジトリに存在します。"
-#          fi
       - name: Restore Stocked Metadata from Cache
         uses: actions/cache/restore@v4
         with:
@@ -72,7 +20,6 @@ jobs:
           fail-on-cache-miss: true
 
       - name: Load metadata content
-        id: encode_json
         run: |
           B64_CONTENT=$(base64 -w 0 metadata.json)
           echo "meta_payload=${B64_CONTENT}" >> $GITHUB_ENV

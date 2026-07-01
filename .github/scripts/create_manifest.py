@@ -21,10 +21,9 @@ def extract_bl_info(init_path):
 
 
 def main():
-    src_dir = "src"
-    addon_dir = os.path.join(src_dir, "bl-ext-test")
+    addon_dir = "bl-ext-test"
     init_script_path = os.path.join(addon_dir, "__init__.py")
-    base_toml_path = os.path.join(src_dir, "blender_manifest_base.toml")
+    base_toml_path = "blender_manifest_base.toml"
 
     with open(base_toml_path, "rb") as f:
         manifest = tomllib.load(f)

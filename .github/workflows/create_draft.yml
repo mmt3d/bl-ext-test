@@ -17,49 +17,32 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
-        with:
-          path: src
 
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
           python-version: '3.13'
 
-#      - name: Extract Version from bl_info
-#        id: get_version
-#        run: python .github/scripts/get_version.py
-
       - name: Create Manifest
         id: build_meta
-        run: python src/.github/scripts/create_manifest.py
+        run: python .github/scripts/create_manifest.py
 
       - name: Zip extension folder
         run: |
-          cd src/bl-ext-test
+          cd bl-ext-test
           zip -r ../${{ steps.build_meta.outputs.zip_name }} ./*
 
       - name: Create Metadata
         env:
           ZIP_NAME: ${{ steps.build_meta.outputs.zip_name }}
           TAG_NAME: ${{ github.event.release.tag_name }}
-        run: python src/.github/scripts/create_metadata.py
-
-#      - name: Create GitHub Release Draft
-#        uses: softprops/action-gh-release@v3
-#        with:
-#          tag_name: v${{ steps.get_version.outputs.version }}
-#          name: v${{ steps.get_version.outputs.version }}
-#          draft: true
-#          body: |
-#            *
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python .github/scripts/create_metadata.py
 
       - name: Create GitHub Release Draft with Artifacts
         id: create_release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: src/${{ steps.build_meta.outputs.zip_name }}
+          artifacts: ${{ steps.build_meta.outputs.zip_name }}
           tag: v${{ steps.build_meta.outputs.version }}
           name: v${{ steps.build_meta.outputs.version }}
           draft: true

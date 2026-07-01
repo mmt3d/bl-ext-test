@@ -33,6 +33,7 @@ def main():
     manifest["archive_url"] = f"https://github.com/{repo_full_name}/releases/download/{tag_name}/{zip_name}"
     manifest["archive_size"] = os.path.getsize(zip_path)
     manifest["archive_hash"] = f"sha256:{calculate_sha256(zip_path)}"
+    manifest["extra"] = {"archive_releases": f"https://github.com/{repo_full_name}/releases"}
 
     json_path = os.path.join(dist_metadata_dir, f"{addon_id}-{version}.json")
     with open(json_path, "w", encoding="utf-8") as f:

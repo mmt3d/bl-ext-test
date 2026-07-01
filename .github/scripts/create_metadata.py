@@ -24,19 +24,14 @@ def main():
     tag_name = os.environ["TAG_NAME"]
     zip_name = os.environ["ZIP_NAME"]
     zip_path = os.path.join(src_dir, zip_name)
-    addon_id = manifest["id"]
-    version = manifest["version"]
 
     manifest["archive_url"] = f"https://github.com/{repo_full_name}/releases/download/{tag_name}/{zip_name}"
     manifest["archive_size"] = os.path.getsize(zip_path)
     manifest["archive_hash"] = f"sha256:{calculate_sha256(zip_path)}"
     manifest["extra"] = {"archive_releases": f"https://github.com/{repo_full_name}/releases"}
 
-    json_path = f"{addon_id}-{version}.json"
-    with open(json_path, "w", encoding="utf-8") as f:
+    with open("metadata.json", "w", encoding="utf-8") as f:
         json.dump(manifest, f, indent=2, ensure_ascii=False)
-
-    print(f"メタデータJSON生成完了: {json_path}")
 
 
 if __name__ == "__main__":

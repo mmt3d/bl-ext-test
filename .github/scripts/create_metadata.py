@@ -14,10 +14,7 @@ def calculate_sha256(filepath: str):
 
 def main():
     src_dir = "src"
-    dist_dir = "dist"
     addon_dir = os.path.join(src_dir, "bl-ext-test")
-    dist_metadata_dir = os.path.join(dist_dir, "metadata")
-    os.makedirs(dist_metadata_dir, exist_ok=True)
 
     toml_path = os.path.join(addon_dir, "blender_manifest.toml")
     with open(toml_path, "rb") as f:
@@ -35,7 +32,7 @@ def main():
     manifest["archive_hash"] = f"sha256:{calculate_sha256(zip_path)}"
     manifest["extra"] = {"archive_releases": f"https://github.com/{repo_full_name}/releases"}
 
-    json_path = os.path.join(dist_metadata_dir, f"{addon_id}-{version}.json")
+    json_path = f"{addon_id}-{version}.json"
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(manifest, f, indent=2, ensure_ascii=False)
 

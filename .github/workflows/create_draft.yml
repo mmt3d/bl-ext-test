@@ -2,13 +2,14 @@ name: Create Release Draft on Version Update
 
 env:
   ADDON_DIR: "bl-ext-test"
+  BL_INFO_SCRIPT_PATH: "__init__.py"
 
 on:
   push:
     branches:
       - main
     paths:
-      - "${{ env.ADDON_DIR }}/__init__.py"
+      - "${{ env.ADDON_DIR }}/${{ env.BL_INFO_SCRIPT_PATH }}"
   workflow_dispatch: {}
 
 permissions:

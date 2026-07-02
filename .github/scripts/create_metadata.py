@@ -30,6 +30,8 @@ def main():
     with open("metadata.json", "w", encoding="utf-8") as f:
         json.dump(manifest, f, indent=2, ensure_ascii=False)
 
+    print(f"Successfully created metadata.json")
+
 
 if __name__ == "__main__":
     main()

@@ -4,9 +4,11 @@ import os
 import tomllib
 
 
-def extract_bl_info(init_path):
-    """__init__.py から bl_info を抽出する"""
-    with open(init_path, "r", encoding="utf-8") as f:
+def extract_bl_info(script_path):
+    """
+    指定コードファイル から bl_info を抽出する
+    """
+    with open(script_path, "r", encoding="utf-8") as f:
         source_code = f.read()
     tree = ast.parse(source_code)
     for node in tree.body:
@@ -16,20 +18,20 @@ def extract_bl_info(init_path):
                     try:
                         return ast.literal_eval(node.value)
                     except (ValueError, SyntaxError) as e:
-                        raise ValueError(f"bl_info の構造が静的に解析できません: {e}")
-    raise ValueError("__init__.py 内にトップレベルの bl_info 定義が見つかりませんでした。")
+                        raise ValueError(f"Failed to parse {node.value}: {e}")
+    raise ValueError("Not found bl_info")
 
 
 def main():
     addon_dir = os.environ["ADDON_DIR"]
-    init_script_path = os.path.join(addon_dir, "__init__.py")
+    bl_info_script_path = os.path.join(addon_dir, os.environ["BL_INFO_SCRIPT_PATH"])
     base_toml_path = "blender_manifest_base.toml"
 
     with open(base_toml_path, "rb") as f:
         manifest = tomllib.load(f)
     addon_id = manifest["id"]
 
-    bl_info = extract_bl_info(init_script_path)
+    bl_info = extract_bl_info(bl_info_script_path)
     version = ".".join(map(str, bl_info.get("version")))
     bl_version = ".".join(map(str, bl_info.get("blender")))
 
@@ -58,7 +60,7 @@ def main():
     with open(toml_path, "w", encoding="utf-8") as f:
         f.write("\n".join(toml_lines) + "\n")
 
-    print(f"マニフェスト生成完了: {toml_path}")
+    print(f"Successfully created manifest: {toml_path}")
 
 
 if __name__ == "__main__":

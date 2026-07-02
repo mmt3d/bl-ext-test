@@ -24,14 +24,14 @@ def extract_bl_info(script_path):
 
 def main():
     addon_dir = os.environ["ADDON_DIR"]
-    bl_info_script_path = os.path.join(addon_dir, os.environ["BL_INFO_SCRIPT_PATH"])
+    bl_info_script = os.environ["BL_INFO_SCRIPT"]
     base_toml_path = "blender_manifest_base.toml"
 
     with open(base_toml_path, "rb") as f:
         manifest = tomllib.load(f)
     addon_id = manifest["id"]
 
-    bl_info = extract_bl_info(bl_info_script_path)
+    bl_info = extract_bl_info(bl_info_script)
     version = ".".join(map(str, bl_info.get("version")))
     bl_version = ".".join(map(str, bl_info.get("blender")))
 

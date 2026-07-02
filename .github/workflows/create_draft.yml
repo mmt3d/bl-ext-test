@@ -33,7 +33,7 @@ jobs:
 
       - name: Zip extension folder
         run: |
-          cd bl-ext-test
+          cd ${{ env.ADDON_DIR }}
           zip -r ../${{ steps.build_meta.outputs.zip_name }} ./*
 
       - name: Create Metadata

@@ -1,5 +1,8 @@
 name: Trigger Distribution on Publish
 
+env:
+  DISTRIBUTION_REPO: mmt3d/blender-extension
+
 on:
   release:
     types: [published]
@@ -30,5 +33,5 @@ jobs:
             X POST \
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${{ secrets.DEPLOY_TOKEN }}" \
-            https://api.github.com/repos/mmt3d/blender-extensions/dispatches \
+            https://api.github.com/repos/${{ env.DISTRIBUTION_REPO }}/dispatches \
             -d '{"event_type": "addon_published", "client_payload": {"metadata": "${{ env.meta_payload }}"}}'

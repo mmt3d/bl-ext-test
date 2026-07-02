@@ -21,7 +21,7 @@ def extract_bl_info(init_path):
 
 
 def main():
-    addon_dir = "bl-ext-test"
+    addon_dir = os.environ["ADDON_DIR"]
     init_script_path = os.path.join(addon_dir, "__init__.py")
     base_toml_path = "blender_manifest_base.toml"
 
@@ -34,7 +34,7 @@ def main():
     bl_version = ".".join(map(str, bl_info.get("blender")))
 
     zip_name = f"{addon_id}-{version}.zip"
-    with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
+    with open(os.environ['GITHUB_OUTPUT'], "a") as fh:
         print(f"zip_name={zip_name}", file=fh)
         print(f"version={version}", file=fh)
 

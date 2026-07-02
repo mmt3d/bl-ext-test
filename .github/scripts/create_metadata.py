@@ -6,14 +6,14 @@ import tomllib
 
 def calculate_sha256(filepath: str):
     sha256_hash = hashlib.sha256()
-    with open(filepath, 'rb') as f:
+    with open(filepath, "rb") as f:
         for byte_block in iter(lambda: f.read(4096), b''):
             sha256_hash.update(byte_block)
     return sha256_hash.hexdigest()
 
 
 def main():
-    addon_dir = "bl-ext-test"
+    addon_dir = os.environ["ADDON_DIR"]
     toml_path = os.path.join(addon_dir, "blender_manifest.toml")
     with open(toml_path, "rb") as f:
         manifest = tomllib.load(f)

@@ -5,7 +5,7 @@ bl_info = {
     'version': (2026, 7, 8),
     'blender': (3, 3, 0),
     'location': "location test",
-    'description': "description test",
+    'description': "description test description test",
     'warning': "",
     'wiki_url': 'https://github.com/mmt3d/bl-ext-test/blob/main/README.md',
     'tracker_url': 'https://github.com/mmt3d/bl-ext-test',

@@ -1,7 +1,7 @@
 name: Trigger Distribution on Publish
 
 env:
-  DISTRIBUTION_REPO: mmt3d/blender-extension
+  DISTRIBUTION_REPO: "mmt3d/blender-extensions"
 
 on:
   release:

@@ -1,4 +1,4 @@
-name: Deploy Blender Extension
+name: Trigger Distribution on Publish
 
 on:
   release:
@@ -9,10 +9,10 @@ permissions:
   contents: write
 
 jobs:
-  deploy:
+  notify:
     runs-on: ubuntu-latest
     steps:
-      - name: Restore Stocked Metadata from Cache
+      - name: Restore Metadata from Cache
         uses: actions/cache/restore@v4
         with:
           path: metadata.json

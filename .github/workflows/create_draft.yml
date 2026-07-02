@@ -49,7 +49,7 @@ jobs:
           generateReleaseNotes: true
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Stock Metadata to Cache
+      - name: Store Metadata to Cache
         uses: actions/cache/save@v4
         with:
           path: metadata.json

@@ -14,19 +14,18 @@ def calculate_sha256(filepath: str):
 
 def main():
     addon_dir = "bl-ext-test"
-
     toml_path = os.path.join(addon_dir, "blender_manifest.toml")
     with open(toml_path, "rb") as f:
         manifest = tomllib.load(f)
 
-    repo_full_name = os.environ.get("GITHUB_REPOSITORY", "mmt3d/bl-ext-test")
+    repo_name = os.environ["GITHUB_REPOSITORY"]
     tag_name = os.environ["TAG_NAME"]
     zip_name = os.environ["ZIP_NAME"]
 
-    manifest["archive_url"] = f"https://github.com/{repo_full_name}/releases/download/{tag_name}/{zip_name}"
+    manifest["archive_url"] = f"https://github.com/{repo_name}/releases/download/{tag_name}/{zip_name}"
     manifest["archive_size"] = os.path.getsize(zip_name)
     manifest["archive_hash"] = f"sha256:{calculate_sha256(zip_name)}"
-    manifest["extra"] = {"archive_releases": f"https://github.com/{repo_full_name}/releases"}
+    manifest["extra"] = {"archive_releases": f"https://github.com/{repo_name}/releases"}
 
     with open("metadata.json", "w", encoding="utf-8") as f:
         json.dump(manifest, f, indent=2, ensure_ascii=False)
